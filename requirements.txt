@@ -4,3 +4,4 @@ python-dotenv==1.0.1
 requests==2.31.0
 httpx==0.26.0
 groq
+firebase-admin==6.4.0
