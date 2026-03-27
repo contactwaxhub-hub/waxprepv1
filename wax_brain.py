@@ -1,4 +1,4 @@
-groq import Groq
+from groq import Groq
 from config import GROQ_API_KEY
 from firebase import get_student, create_student, update_student, increment_session
 
