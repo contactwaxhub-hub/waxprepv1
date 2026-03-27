@@ -19,20 +19,20 @@ async def receive_message(request: Request):
     try:
         entry = data["entry"][0]
         changes = entry["changes"][0]["value"]
-        
+
         if "messages" not in changes:
             return {"status": "no message"}
-        
+
         message = changes["messages"][0]
         phone_number = message["from"]
-        
+
         if message.get("type") == "text":
             message_text = message["text"]["body"]
-            wax_response = get_wax_response(message_text)
+            wax_response = get_wax_response(phone_number, message_text)
             send_message(phone_number, wax_response)
         else:
             send_message(phone_number, "Hey! Wax only understands text for now. Type your question and I'll help you 😊")
-        
+
         return {"status": "ok"}
     except Exception as e:
         print(f"Error: {e}")
