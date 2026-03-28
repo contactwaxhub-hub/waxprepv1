@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from config import WEBHOOK_VERIFY_TOKEN
-from wax_brain import get_wax_response
+from controller import handle_message
 from whatsapp import send_message
 
 router = APIRouter()
@@ -29,11 +29,11 @@ async def receive_message(request: Request):
 
         if msg_type == "text":
             message_text = message["text"]["body"]
-            wax_response = get_wax_response(phone_number, message_text, "text")
+            wax_response = handle_message(phone_number, message_text, "text")
         elif msg_type == "audio":
-            wax_response = get_wax_response(phone_number, "", "audio")
+            wax_response = "Hey! I can only read text for now. Type your question 😊"
         elif msg_type == "image":
-            wax_response = get_wax_response(phone_number, "", "image")
+            wax_response = "Hey! I can only read text for now. Type your question 😊"
         else:
             wax_response = "Hey! Wax only understands text for now. Type your question and I will help you 😊"
 
