@@ -1,5 +1,6 @@
-lfrom fastapi import APIRouter, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import PlainTextResponse
+
 from config import WEBHOOK_VERIFY_TOKEN
 from controller import handle_message
 from whatsapp import send_message
@@ -9,6 +10,7 @@ router = APIRouter()
 
 @router.get("/webhook")
 async def verify_webhook(request: Request):
+
     params = dict(request.query_params)
 
     mode = params.get("hub.mode")
