@@ -1,20 +1,22 @@
 import requests
-from config import WHATSAPP_TOKEN, WHATSAPP_PHONE_NUMBER_ID
+import os
 
-def send_message(phone_number, message):
-    url = f"https://graph.facebook.com/v17.0/{WHATSAPP_PHONE_NUMBER_ID}/messages"
-    
+def send_message(to: str, message: str):
+
+    url = f"https://graph.facebook.com/v19.0/{os.getenv('PHONE_NUMBER_ID')}/messages"
+
     headers = {
-        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
+        "Authorization": f"Bearer {os.getenv('WHATSAPP_TOKEN')}",
         "Content-Type": "application/json"
     }
-    
+
     payload = {
         "messaging_product": "whatsapp",
-        "to": phone_number,
+        "to": to,
         "type": "text",
         "text": {"body": message}
     }
-    
-    response = requests.post(url, headers=headers, json=payload)
-    return response.json()
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    print("WhatsApp API:", response.status_code, response.text)
