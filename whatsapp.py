@@ -3,13 +3,18 @@ import os
 
 def send_message(to: str, message: str):
 
-    url = f"https://graph.facebook.com/v19.0/{os.getenv('PHONE_NUMBER_ID')}/messages"
+    phone_number_id = os.getenv("PHONE_NUMBER_ID")
+    token = os.getenv("WHATSAPP_TOKEN")
 
-    token = os.getenv('WHATSAPP_TOKEN')
+    if not phone_number_id:
+        print("❌ PHONE_NUMBER_ID missing")
+        return
 
     if not token:
-        print("❌ TOKEN MISSING")
+        print("❌ WHATSAPP_TOKEN missing")
         return
+
+    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -29,4 +34,4 @@ def send_message(to: str, message: str):
         print("📩 RESPONSE:", response.text)
 
     except Exception as e:
-        print("❌ REQUEST FAILED:", str(e))
+        print("❌ SEND ERROR:", str(e))
