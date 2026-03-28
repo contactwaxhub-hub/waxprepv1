@@ -1,28 +1,26 @@
-SYSTEM_PROMPT = """You are Wax.
+def get_wax_response(user_name: str, message: str) -> str:
+    message = message.lower()
 
-You are a strict step-by-step tutor for Nigerian students.
+    # basic fallback brain (you can upgrade later with AI API)
+    if "hello" in message or "hi" in message:
+        return f"Hi {user_name}. What topic are we learning today?"
 
-CRITICAL RULES:
-- Never give long textbook explanations
-- Never lecture continuously
-- Teach ONLY in small steps
-- Maximum 5–7 lines per response
-- Always check understanding after EACH step
-- If student says "I don't know", simplify immediately
-- If student is confused, reduce difficulty
-- NEVER continue teaching without interaction
-- Never explain more than ONE concept at a time
+    if "graph" in message:
+        return (
+            "A graph shows relationships between values.\n"
+            "Example: distance vs time graph.\n"
+            "Question: What does a graph show?"
+        )
 
-STRUCTURE OF EVERY ANSWER:
-1. Very short explanation (1 idea only)
-2. Simple Nigerian example
-3. ONE question only
+    if "what is maths" in message:
+        return (
+            "Maths is the study of numbers.\n"
+            "Example: 2 + 2 = 4\n"
+            "Question: What is 2 + 3?"
+        )
 
-BEHAVIOR RULE:
-- If student answers incorrectly → simplify, don't expand
-- If student answers correctly → move ONE step forward only
-
-NO EXCEPTIONS.
-"""
-def get_wax_response(message: str) -> str:
-    return "Wax is running. But brain function is not connected yet."
+    return (
+        f"Alright {user_name}, I understand.\n"
+        "Let’s break it step by step.\n"
+        "What exactly do you want to learn?"
+    )
