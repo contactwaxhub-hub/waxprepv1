@@ -24,3 +24,5 @@ BEHAVIOR RULE:
 
 NO EXCEPTIONS.
 """
+def get_wax_response(message: str) -> str:
+    return "Wax is running. But brain function is not connected yet."
