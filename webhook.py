@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+lfrom fastapi import APIRouter, Request
 from fastapi.responses import PlainTextResponse
 from config import WEBHOOK_VERIFY_TOKEN
 from controller import handle_message
@@ -7,9 +7,6 @@ from whatsapp import send_message
 router = APIRouter()
 
 
-# =========================
-# VERIFY WEBHOOK (IMPORTANT FIX)
-# =========================
 @router.get("/webhook")
 async def verify_webhook(request: Request):
     params = dict(request.query_params)
@@ -18,7 +15,7 @@ async def verify_webhook(request: Request):
     token = params.get("hub.verify_token")
     challenge = params.get("hub.challenge")
 
-    print("WEBHOOK VERIFY HIT:", params)
+    print("🔐 VERIFY HIT:", params)
 
     if mode == "subscribe" and token == WEBHOOK_VERIFY_TOKEN:
         return PlainTextResponse(content=challenge)
@@ -26,14 +23,13 @@ async def verify_webhook(request: Request):
     return PlainTextResponse(content="failed", status_code=403)
 
 
-# =========================
-# RECEIVE MESSAGE
-# =========================
 @router.post("/webhook")
 async def receive_message(request: Request):
+
     try:
         data = await request.json()
-        print("🔥 WEBHOOK HIT:", data)
+
+        print("🔥 WEBHOOK HIT")
 
         entry = data.get("entry", [])
         if not entry:
@@ -44,8 +40,8 @@ async def receive_message(request: Request):
             return {"status": "no changes"}
 
         value = changes[0].get("value", {})
-
         messages = value.get("messages")
+
         if not messages:
             return {"status": "no message"}
 
@@ -54,13 +50,13 @@ async def receive_message(request: Request):
         phone = message.get("from")
         msg_type = message.get("type")
 
+        print(f"📩 FROM: {phone} | TYPE: {msg_type}")
+
         if msg_type == "text":
             text = message["text"]["body"]
             reply = handle_message(phone, text, "text")
         else:
-            reply = "I only understand text for now."
-
-        print(f"📩 FROM: {phone} | MESSAGE: {msg_type}")
+            reply = "Only text supported."
 
         send_message(phone, reply)
 
@@ -68,4 +64,4 @@ async def receive_message(request: Request):
 
     except Exception as e:
         print("❌ WEBHOOK ERROR:", str(e))
-        return {"status": "error", "message": str(e)}
+        return {"status": "error"}
